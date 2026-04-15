@@ -135,8 +135,8 @@
                 <h3>Información de Contacto</h3>
                 <ul>
                     <li>📍Yrigoyen 2418,Ctes. Cap.</li>
-                    <li>📱 +54 9 3794 123456789</li>
-                    <li>✉️ contacto@westsidestyle.com.ar</li>
+                    <li>📱 +54 9 3795 193973 </li>
+                    <li>✉️ westside.ctes@gmail.com</li>
                 </ul>
             </div>
             <div class="footer-col">
