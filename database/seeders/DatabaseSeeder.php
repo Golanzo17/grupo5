@@ -53,6 +53,19 @@ Confeccionada en jersey puro algodón, con calce Boxy y estampa en serigrafía e
             'imagen_detalle' => null 
         ]);
 
+        Producto::create([
+            'categoria_id' => $catRemeras->id, 
+            'nombre' => 'Remera ELYSEES boxy',
+            'descripcion' => 'Confeccionada en jersey puro algodón, con calce Boxy y estampa en serigrafía tanto en el frente como en espalda.
+Esta misma cuenta con un lavado Acidwash que logra un efecto de desgaste vintage.',
+            'stock' => 19, 
+            'precio' => 24000.00, 
+            
+            'imagen_frente' => '/images/Catalogo/ropa/Remera-ELYSEES.webp',
+            'imagen_espalda' => '/images/Catalogo/ropa/Remera-ELYSEES-dorso.webp', 
+            'imagen_detalle' => null 
+        ]);
+
         // ---- PRODUCTO 3: PANTALONES ----
         Producto::create([
             'categoria_id' => $catPantalones->id, 

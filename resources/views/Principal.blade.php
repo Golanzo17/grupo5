@@ -45,11 +45,11 @@
                 <h2>Cultura & Estilo</h2>
                 <p>Nacidos en la calle, elevados por el detalle. Westside no es solo una marca de ropa ni solo una barbería. Somos el punto de encuentro donde nacen las tendencias de la ciudad. Combinamos estética urbana moderna con la atención premium de una barbería clásica.</p>
                 <div class="image-box">
-                    <span>(Lugar para logo secudnario)</span>
+                    <img src="/images/barberia/WestSide Barber.jpg" alt="logo Barbería Westside">
                 </div>
             </div>
             <div class="image-content gs-slide-right">
-                <img src="/images/barber.png" alt="Barbería Westside" class="img-fluid">
+                <img src="/images/barberia/Barber1.jpeg" alt="Westside Barbería">
             </div>
         </div>
     </section>
@@ -64,13 +64,9 @@
                     <h3>Venta Minorista</h3>
                     <p>Adquiere nuestras prendas exclusivas directamente desde nuestra sucursal o con envío a todo el país.</p>
                 </div>
+                
                 <div class="step-card gs-fade-up">
                     <div class="step-icon">2</div>
-                    <h3>Venta Mayorista</h3>
-                    <p>Potenciá tu negocio. Ofrecemos catálogos mayoristas con beneficios especiales para revendedores.</p>
-                </div>
-                <div class="step-card gs-fade-up">
-                    <div class="step-icon">3</div>
                     <h3>Barbería</h3>
                     <p>Turnos presenciales con profesionales de primer nivel. Experiencia premium asegurada.</p>
                 </div>

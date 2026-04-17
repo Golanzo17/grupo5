@@ -14,7 +14,9 @@
 }
 
 /* RESET GENERAL */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -137,7 +139,11 @@ img {
 }
 
 @media (max-width: 900px) {
-  .nav-links { display: none; } /* En una app real de prod haríamos un menú hamburguesa */
+  .nav-links {
+    display: none;
+  }
+
+  /* En una app real de prod haríamos un menú hamburguesa */
 }
 
 /* 1. PRINCIPAL (HERO) */
@@ -217,6 +223,13 @@ img {
   justify-content: center;
   color: var(--text-muted);
   border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .img-fluid {
@@ -224,11 +237,13 @@ img {
   height: auto;
   border-radius: 8px;
   object-fit: cover;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 768px) {
-  .dual-grid { grid-template-columns: 1fr; }
+  .dual-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* 3. COMERCIALIZACIÓN */
@@ -307,7 +322,8 @@ img {
   cursor: pointer;
 }
 
-.product-card img, .placeholder-img {
+.product-card img,
+.placeholder-img {
   width: 100%;
   height: 400px;
   object-fit: cover;
@@ -323,7 +339,8 @@ img {
   font-size: 1.2rem;
 }
 
-.product-card:hover img, .product-card:hover .placeholder-img {
+.product-card:hover img,
+.product-card:hover .placeholder-img {
   transform: scale(1.05);
 }
 
@@ -351,7 +368,7 @@ img {
   padding: 50px;
   border-radius: 12px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .form-container h2 {
@@ -438,6 +455,9 @@ img {
 }
 
 /* CLASES GSAP INICIALES (Para prevención de flashes) */
-.gs-reveal, .gs-slide-left, .gs-slide-right, .gs-fade-up {
+.gs-reveal,
+.gs-slide-left,
+.gs-slide-right,
+.gs-fade-up {
   visibility: hidden;
 }
