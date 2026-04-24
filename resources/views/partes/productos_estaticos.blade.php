@@ -16,10 +16,10 @@
 </div>
 
 <div class="product-card gs-fade-up">
-    <img src="/images/Catalogo/ropa/Remera-ELYSEES.webp" alt="Remera ELYSEES boxy">
+    <img src="/images/Catalogo/ropa/Remera-Hendrix.webp" alt="Remera Hendryx">
     <div class="product-info">
-        <h4>Remera ELYSEES boxy</h4>
-        <p class="product-price">$ 24.000</p>
+        <h4>Remera Hendryx</h4>
+        <p class="product-price">$ 45.000</p>
     </div>
 </div>
 

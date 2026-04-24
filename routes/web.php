@@ -20,3 +20,7 @@ Route::get('/catalogo', function () {
 Route::get('/principal', function () {
     return view('Principal');
 });
+
+Route::get('/quienes-somos', function () {
+    return view('quienes-somos');
+});
