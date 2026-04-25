@@ -63,25 +63,23 @@
             
             <div class="ig-grid">
                 <!-- Cuenta 1: Streetwear / Ropa -->
-                <a href="https://instagram.com/tu_cuenta_ropa" target="_blank" class="ig-card">
+                <a href="https://www.instagram.com/westsid3club/" target="_blank" class="ig-card">
                     <div class="ig-image">
-                        <div class="placeholder-ig">FOTO IG ROPA</div>
-                        <!-- <img src="/images/tu_foto_ig_ropa.jpg" alt="Instagram Ropa"> -->
+                        <img src="/images/Quienes-somos/Ig-ropa.png" alt="Instagram Ropa">
                     </div>
                     <div class="ig-info">
-                        <h3>@westside_streetwear</h3>
+                        <h3>@westsid3club</h3>
                         <p>Nuestra colección y estilo urbano</p>
                     </div>
                 </a>
 
                 <!-- Cuenta 2: Barbería -->
-                <a href="https://instagram.com/tu_cuenta_barberia" target="_blank" class="ig-card">
+                <a href="https://www.instagram.com/westsidebarberclub/" target="_blank" class="ig-card">
                     <div class="ig-image">
-                        <div class="placeholder-ig">FOTO IG BARBERÍA</div>
-                        <!-- <img src="/images/tu_foto_ig_barber.jpg" alt="Instagram Barbería"> -->
+                        <img src="/images/Quienes-somos/Ig-barber.png" alt="Instagram Barbería">
                     </div>
                     <div class="ig-info">
-                        <h3>@westside_barber</h3>
+                        <h3>@westsidebarberclub</h3>
                         <p>Cortes, cuidado personal y cultura</p>
                     </div>
                 </a>

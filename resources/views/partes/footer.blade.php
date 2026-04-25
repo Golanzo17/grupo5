@@ -12,8 +12,8 @@
             <div class="footer-col">
                 <h3>Enlaces Legales</h3>
                 <ul>
-                    <li><a href="#">Términos y Usos</a></li>
-                    <li><a href="#">Política de Privacidad</a></li>
+                    <li><a href="/terminos-y-usos">Términos y Usos</a></li>
+                    <li><a href="/terminos-y-usos">Política de Privacidad</a></li>
                     <li><a href="#">Políticas de Devolución</a></li>
                 </ul>
             </div>

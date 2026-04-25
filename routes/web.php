@@ -24,3 +24,7 @@ Route::get('/principal', function () {
 Route::get('/quienes-somos', function () {
     return view('quienes-somos');
 });
+
+Route::get('/terminos-y-usos', function () {
+    return view('partes.Terminos-y-usos');
+});
