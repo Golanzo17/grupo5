@@ -26,13 +26,17 @@ Route::get('/quienes-somos', function () {
 });
 
 Route::get('/terminos-y-usos', function () {
-    return view('partes.Terminos-y-usos');
+    return view('Terminos-y-usos');
 });
 
 Route::get('/comercializacion', function () {
-    return view('partes.Comercializacion');
+    return view('Comercializacion');
 });
 
 Route::get('/contacto', function () {
-    return view('partes.Contacto');
+    return view('Contacto');
+});
+
+Route::get('/turnos', function () {
+    return view('Turnos');
 });
