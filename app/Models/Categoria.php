@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categoria extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = ['nombre', 'slug'];
+
+    // Relación: Una categoría tiene muchos productos
+    public function productos() {
+        return $this->hasMany(Producto::class);
+    }
 }
