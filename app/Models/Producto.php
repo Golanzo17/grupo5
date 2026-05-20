@@ -12,7 +12,7 @@ class Producto extends Model
 
     protected $fillable = [
         'categoria_id', 'nombre', 'slug', 'descripcion', 
-        'precio', 'imagen_ruta', 'es_nuevo', 'activo'
+        'precio', 'imagen_ruta', 'es_nuevo', 'activo', 'stock'
     ];
 
     // Relación: Un producto pertenece a una categoría
