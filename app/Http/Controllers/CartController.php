@@ -29,6 +29,16 @@ class CartController extends Controller
                 'cantidad' => $request->input('cantidad', 1),
             ]);
         }
+        
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Producto agregado al carrito',
+                'cart_count' => $cart->items()->sum('cantidad'),
+                'mini_cart_html' => view('partes.mini_cart', ['cart' => $cart])->render()
+            ]);
+        }
+        
         return redirect()->back()->with('success', 'Producto agregado al carrito');
     }
 
@@ -40,10 +50,21 @@ class CartController extends Controller
         return redirect()->back();
     }
 
-    public function remove($itemId)
+    public function remove(Request $request, $itemId)
     {
         $item = CartItem::findOrFail($itemId);
+        $cart = $item->cart;
         $item->delete();
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Producto eliminado',
+                'cart_count' => $cart->items()->sum('cantidad'),
+                'mini_cart_html' => view('partes.mini_cart', ['cart' => $cart])->render()
+            ]);
+        }
+
         return redirect()->back();
     }
 }

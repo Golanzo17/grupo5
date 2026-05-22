@@ -19,10 +19,21 @@
                             <span class="product-new-tag">Nuevo</span>
                         @endif
                         
-                        <img src="{{ $producto->imagen_ruta }}" alt="{{ $producto->nombre }}">
+                        <img src="{{ Str::startsWith($producto->imagen_ruta, ['http', '/', 'images/']) ? asset($producto->imagen_ruta) : asset('storage/' . $producto->imagen_ruta) }}" alt="{{ $producto->nombre }}">
                         
                         <div class="product-overlay">
-                            <a href="https://wa.me/{{ env('WSP_NUMBER', '5493795193973') }}?text=Hola,%20me%20interesa%20el%20producto:%20{{ urlencode($producto->nombre) }}" class="product-overlay-btn" target="_blank">{!! $wspIcon !!} Consultar</a>
+                            @auth
+                                <form action="{{ route('carrito.add', $producto->id) }}" method="POST" style="margin: 0; width: 100%;">
+                                    @csrf
+                                    <input type="hidden" name="cantidad" value="1">
+                                    <button type="submit" class="product-overlay-btn" style="width: 100%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--accent-color); color: var(--bg-dark);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/><path d="M12 10v6"/><path d="M9 13h6"/></svg>
+                                        Agregar al carrito
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="product-overlay-btn" style="text-align: center; text-decoration: none; background: var(--bg-light); color: var(--text-main);">Iniciar sesión</a>
+                            @endauth
                         </div>
                         <div class="product-info">
                             <h4>{{ $producto->nombre }}</h4>
@@ -105,6 +116,72 @@
             document.getElementById('productCount').textContent = visible + ' producto' + (visible !== 1 ? 's' : '');
             document.getElementById('noProductsMessage').style.display = visible === 0 ? 'block' : 'none';
         }
-    </script>
 
+        // === Agregar al carrito sin recargar la página (AJAX) ===
+        document.querySelectorAll('form[action*="carrito/agregar"]').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const btn = this.querySelector('button');
+                const originalHtml = btn.innerHTML;
+                
+                // Efecto de carga en el botón
+                btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Agregando...';
+                btn.disabled = true;
+
+                fetch(this.action, {
+                    method: 'POST',
+                    body: new FormData(this),
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Restaurar botón
+                    btn.innerHTML = originalHtml;
+                    btn.disabled = false;
+                    
+                    if(data.success) {
+                        // Actualizar contadores del menú
+                        document.querySelectorAll('.cart-count-badge').forEach(badge => {
+                            badge.textContent = data.cart_count;
+                            badge.style.display = 'inline-block';
+                        });
+
+                        // Actualizar el HTML del mini carrito si existe
+                        if (data.mini_cart_html) {
+                            const miniCartContainer = document.getElementById('mini-cart-container');
+                            if (miniCartContainer) {
+                                miniCartContainer.innerHTML = data.mini_cart_html;
+                            }
+                        }
+
+                        // Mostrar el toast
+                        if(typeof window.showToast === 'function') {
+                            window.showToast(data.message);
+                        }
+                    }
+                })
+                .catch(err => {
+                    btn.innerHTML = originalHtml;
+                    btn.disabled = false;
+                    console.error('Error agregando al carrito:', err);
+                });
+            });
+        });
+
+        // Estilo rápido para el spinner y para anular la sombra verde del botón viejo
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes spin { 100% { transform: rotate(360deg); } } 
+            .spin { animation: spin 1s linear infinite; }
+            #catalog-products .product-card:hover .product-overlay-btn {
+                box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15) !important;
+            }
+        `;
+        document.head.appendChild(style);
+
+    </script>
 @endsection
