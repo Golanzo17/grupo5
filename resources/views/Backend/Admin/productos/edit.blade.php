@@ -66,7 +66,7 @@
             <div class="form-group">
                 <label>Imagen actual</label>
                 <div class="current-image">
-                    <img src="{{ asset('storage/' . $producto->imagen_ruta) }}" alt="{{ $producto->nombre }}" class="preview-img">
+                    <img src="{{ Str::startsWith($producto->imagen_ruta, ['http', '/', 'images/']) ? asset($producto->imagen_ruta) : asset('storage/' . $producto->imagen_ruta) }}" alt="{{ $producto->nombre }}" class="preview-img">
                 </div>
             </div>
 

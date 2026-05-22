@@ -25,7 +25,7 @@
                 @forelse($productos as $producto)
                     <tr>
                         <td>
-                            <img src="{{ asset('storage/' . $producto->imagen_ruta) }}" alt="{{ $producto->nombre }}" class="table-img">
+                            <img src="{{ Str::startsWith($producto->imagen_ruta, ['http', '/', 'images/']) ? asset($producto->imagen_ruta) : asset('storage/' . $producto->imagen_ruta) }}" alt="{{ $producto->nombre }}" class="table-img">
                         </td>
                         <td>
                             <strong>{{ $producto->nombre }}</strong>

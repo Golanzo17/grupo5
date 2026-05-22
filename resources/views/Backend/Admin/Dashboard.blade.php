@@ -5,7 +5,7 @@
 @section('content')
     <!-- Stats Cards -->
     <div class="admin-stats-grid">
-        <div class="stat-card">
+        <a href="{{ route('admin.usuarios.index') }}" class="stat-card" style="text-decoration: none; color: inherit;">
             <div class="stat-icon stat-icon-users">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
@@ -13,9 +13,9 @@
                 <span class="stat-number">{{ $totalUsuarios }}</span>
                 <span class="stat-label">Usuarios</span>
             </div>
-        </div>
+        </a>
 
-        <div class="stat-card">
+        <a href="{{ route('admin.productos.index') }}" class="stat-card" style="text-decoration: none; color: inherit;">
             <div class="stat-icon stat-icon-products">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             </div>
@@ -23,9 +23,9 @@
                 <span class="stat-number">{{ $totalProductos }}</span>
                 <span class="stat-label">Productos</span>
             </div>
-        </div>
+        </a>
 
-        <div class="stat-card">
+        <a href="{{ route('admin.categorias.index') }}" class="stat-card" style="text-decoration: none; color: inherit;">
             <div class="stat-icon stat-icon-categories">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
             </div>
@@ -33,7 +33,7 @@
                 <span class="stat-number">{{ $totalCategorias }}</span>
                 <span class="stat-label">Categorías</span>
             </div>
-        </div>
+        </a>
     </div>
 
     <!-- Quick Actions -->

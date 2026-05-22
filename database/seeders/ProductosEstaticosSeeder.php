@@ -91,11 +91,11 @@ class ProductosEstaticosSeeder extends Seeder
         
         // Agregar productos de Barbería
         $productosBarberia = [
-            ['nombre' => 'Hair Powder OBO', 'precio' => 20000, 'imagen' => '/images/Catalogo/barber/Polvo.jpeg', 'cat' => 'barbería', 'destacado' => false],
-            ['nombre' => 'Cera Mate OBO', 'precio' => 12000, 'imagen' => '/images/Catalogo/barber/Cera_Obo.jpeg', 'cat' => 'barbería', 'destacado' => false],
-            ['nombre' => 'Hair Spray SirFausto', 'precio' => 15000, 'imagen' => '/images/Catalogo/barber/Fijador.jpeg', 'cat' => 'barbería', 'destacado' => false],
-            ['nombre' => 'Pomada Clasica SirFausto', 'precio' => 12000, 'imagen' => '/images/Catalogo/barber/Sir-fausto-pomada-clasica.png', 'cat' => 'barbería', 'destacado' => false],
-            ['nombre' => 'Pomada Opaca SirFausto', 'precio' => 12000, 'imagen' => '/images/Catalogo/barber/Sir-fausto-pomada-opaca.png', 'cat' => 'barbería', 'destacado' => false],
+            ['nombre' => 'Hair Powder OBO', 'precio' => 20000, 'imagen' => '/images/Catalogo/barbershop/polvo-texturizador.jpg', 'cat' => 'barbería', 'destacado' => false],
+            ['nombre' => 'Cera Mate OBO', 'precio' => 12000, 'imagen' => '/images/Catalogo/barbershop/cera-mate.jpg', 'cat' => 'barbería', 'destacado' => false],
+            ['nombre' => 'Hair Spray SirFausto', 'precio' => 15000, 'imagen' => '/images/Catalogo/barbershop/gel-fijador.jpg', 'cat' => 'barbería', 'destacado' => false],
+            ['nombre' => 'Pomada Clasica SirFausto', 'precio' => 12000, 'imagen' => '/images/Catalogo/barbershop/cera-brillante.jpg', 'cat' => 'barbería', 'destacado' => false],
+            ['nombre' => 'Pomada Opaca SirFausto', 'precio' => 12000, 'imagen' => '/images/Catalogo/barbershop/mascara-matizadora.jpg', 'cat' => 'barbería', 'destacado' => false],
         ];
         
         $catBarberia = Categoria::where('slug', 'barberia')->first();
