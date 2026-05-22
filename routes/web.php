@@ -7,6 +7,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\CartController;
 
 use App\Http\Controllers\HomeController;
 
@@ -82,4 +83,15 @@ Route::middleware(['auth', 'rol:cliente'])->prefix('cliente')->name('cliente.')-
     Route::get('/',       [ClienteController::class, 'dashboard'])->name('dashboard');
     Route::get('/perfil', [ClienteController::class, 'perfil'])->name('perfil');
     Route::put('/perfil', [ClienteController::class, 'actualizarPerfil'])->name('perfil.update');
+});
+
+// ─────────────────────────────────────────────
+// RUTAS DEL CARRITO (requiere autenticación)
+// ─────────────────────────────────────────────
+
+Route::middleware('auth')->group(function () {
+    Route::get('/carrito', [CartController::class, 'index'])->name('carrito.index');
+    Route::post('/carrito/agregar/{id}', [CartController::class, 'add'])->name('carrito.add');
+    Route::post('/carrito/eliminar/{id}', [CartController::class, 'remove'])->name('carrito.remove');
+    Route::post('/carrito/actualizar/{id}', [CartController::class, 'update'])->name('carrito.update');
 });
