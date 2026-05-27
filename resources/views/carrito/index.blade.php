@@ -32,6 +32,9 @@
                                 <img src="{{ Str::startsWith($item->producto->imagen_ruta, ['http', '/', 'images/']) ? asset($item->producto->imagen_ruta) : asset('storage/' . $item->producto->imagen_ruta) }}" alt="{{ $item->producto->nombre }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                                 <div>
                                     <h3 style="font-size: 1.1rem; margin-bottom: 5px;">{{ $item->producto->nombre }}</h3>
+                                    @if($item->talle)
+                                        <p style="color: var(--text-main); font-size: 0.95rem; margin-bottom: 5px;">Talle: <strong>{{ $item->talle->nombre }}</strong></p>
+                                    @endif
                                     <p style="color: var(--text-muted); font-size: 0.9rem;">Precio unitario: ${{ number_format($item->producto->precio, 2, ',', '.') }}</p>
                                 </div>
                             @else
@@ -82,23 +85,9 @@
                 </div>
 
                 <div style="display: flex; justify-content: flex-end; margin-top: 25px;">
-                    @php
-                        $wspNumber = env('WSP_NUMBER', '5493795193973');
-                        $wspText = "Hola! Quiero finalizar mi compra:%0A%0A";
-                        $total = 0;
-                        foreach($items as $item) {
-                            if($item->producto) {
-                                $subtotal = $item->producto->precio * $item->cantidad;
-                                $total += $subtotal;
-                                $wspText .= "- " . $item->cantidad . "x " . $item->producto->nombre . " ($" . number_format($subtotal, 0, ',', '.') . ")%0A";
-                            }
-                        }
-                        $wspText .= "%0ATotal a pagar: $" . number_format($total, 0, ',', '.');
-                    @endphp
-                    <a href="https://wa.me/{{ $wspNumber }}?text={{ $wspText }}" target="_blank" class="btn-primary btn-large" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-                        Finalizar Compra
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                    </a>
+                    <div style="margin-top: 20px;">
+                        <a href="{{ route('checkout.index') }}" class="btn-primary" style="padding: 12px 30px; text-decoration: none;">Finalizar Compra</a>
+                    </div>
                 </div>
 
             </div>

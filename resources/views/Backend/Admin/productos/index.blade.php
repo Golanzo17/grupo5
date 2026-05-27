@@ -35,7 +35,7 @@
                         </td>
                         <td>{{ $producto->categoria->nombre ?? '—' }}</td>
                         <td>${{ number_format($producto->precio, 2, ',', '.') }}</td>
-                        <td>{{ $producto->stock ?? 0 }}</td>
+                        <td>{{ $producto->stock_total ?? 0 }}</td>
                         <td>
                             <span class="badge {{ $producto->activo ? 'badge-active' : 'badge-inactive' }}">
                                 {{ $producto->activo ? 'Activo' : 'Inactivo' }}

@@ -1,21 +1,18 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CartItem extends Model
+class OrderItem extends Model
 {
     protected $fillable = [
-        'cart_id',
-        'producto_id',
-        'talle_id',
-        'cantidad',
+        'order_id', 'producto_id', 'talle_id', 'cantidad', 'precio_unitario'
     ];
 
-    public function cart(): BelongsTo
+    public function order()
     {
-        return $this->belongsTo(Cart::class);
+        return $this->belongsTo(Order::class);
     }
 
     public function producto()

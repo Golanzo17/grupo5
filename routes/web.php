@@ -65,6 +65,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::middleware(['auth', 'rol:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
 
+    // Ventas
+    Route::get('/ventas', [AdminController::class, 'ventas'])->name('ventas.index');
+    Route::patch('/ventas/{order}/estado', [AdminController::class, 'actualizarEstadoVenta'])->name('ventas.estado');
+
     // CRUD Productos
     Route::resource('productos', ProductoController::class);
 
@@ -83,6 +87,7 @@ Route::middleware(['auth', 'rol:cliente'])->prefix('cliente')->name('cliente.')-
     Route::get('/',       [ClienteController::class, 'dashboard'])->name('dashboard');
     Route::get('/perfil', [ClienteController::class, 'perfil'])->name('perfil');
     Route::put('/perfil', [ClienteController::class, 'actualizarPerfil'])->name('perfil.update');
+    Route::get('/compras', [ClienteController::class, 'compras'])->name('compras');
 });
 
 // ─────────────────────────────────────────────
@@ -94,4 +99,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/carrito/agregar/{id}', [CartController::class, 'add'])->name('carrito.add');
     Route::post('/carrito/eliminar/{id}', [CartController::class, 'remove'])->name('carrito.remove');
     Route::post('/carrito/actualizar/{id}', [CartController::class, 'update'])->name('carrito.update');
+    
+    // Checkout
+    Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/checkout/success/{order}', [\App\Http\Controllers\CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/orden/{order}/comprobante', [\App\Http\Controllers\CheckoutController::class, 'comprobante'])->name('orden.comprobante');
 });

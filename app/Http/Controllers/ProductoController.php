@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use App\Models\Categoria;
+use App\Models\Talle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -25,7 +26,8 @@ class ProductoController extends Controller
     public function create()
     {
         $categorias = Categoria::all();
-        return view('Backend.Admin.productos.create', compact('categorias'));
+        $talles = Talle::all();
+        return view('Backend.Admin.productos.create', compact('categorias', 'talles'));
     }
 
     /**
@@ -41,13 +43,14 @@ class ProductoController extends Controller
             'imagen'       => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
             'es_nuevo'     => 'nullable|boolean',
             'activo'       => 'nullable|boolean',
-            'stock'        => 'nullable|integer|min:0',
+            'talles'       => 'nullable|array',
+            'talles.*'     => 'nullable|integer|min:0',
         ]);
 
         // Guardar imagen
         $imagenRuta = $request->file('imagen')->store('productos', 'public');
 
-        Producto::create([
+        $producto = Producto::create([
             'nombre'       => $request->nombre,
             'slug'         => Str::slug($request->nombre),
             'categoria_id' => $request->categoria_id,
@@ -56,8 +59,17 @@ class ProductoController extends Controller
             'imagen_ruta'  => $imagenRuta,
             'es_nuevo'     => $request->boolean('es_nuevo'),
             'activo'       => $request->boolean('activo', true),
-            'stock'        => $request->stock ?? 0,
         ]);
+
+        if ($request->has('talles')) {
+            $tallesData = [];
+            foreach ($request->talles as $talleId => $stock) {
+                if ($stock !== null && $stock !== '') {
+                    $tallesData[$talleId] = ['stock' => $stock];
+                }
+            }
+            $producto->talles()->attach($tallesData);
+        }
 
         return redirect()->route('admin.productos.index')->with('exito', 'Producto creado correctamente.');
     }
@@ -76,7 +88,8 @@ class ProductoController extends Controller
     public function edit(Producto $producto)
     {
         $categorias = Categoria::all();
-        return view('Backend.Admin.productos.edit', compact('producto', 'categorias'));
+        $talles = Talle::all();
+        return view('Backend.Admin.productos.edit', compact('producto', 'categorias', 'talles'));
     }
 
     /**
@@ -92,7 +105,8 @@ class ProductoController extends Controller
             'imagen'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'es_nuevo'     => 'nullable|boolean',
             'activo'       => 'nullable|boolean',
-            'stock'        => 'nullable|integer|min:0',
+            'talles'       => 'nullable|array',
+            'talles.*'     => 'nullable|integer|min:0',
         ]);
 
         $datos = [
@@ -103,7 +117,6 @@ class ProductoController extends Controller
             'descripcion'  => $request->descripcion,
             'es_nuevo'     => $request->boolean('es_nuevo'),
             'activo'       => $request->boolean('activo', true),
-            'stock'        => $request->stock ?? $producto->stock,
         ];
 
         // Si se sube una nueva imagen, reemplazar la anterior
@@ -116,6 +129,16 @@ class ProductoController extends Controller
         }
 
         $producto->update($datos);
+
+        if ($request->has('talles')) {
+            $tallesData = [];
+            foreach ($request->talles as $talleId => $stock) {
+                if ($stock !== null && $stock !== '') {
+                    $tallesData[$talleId] = ['stock' => $stock];
+                }
+            }
+            $producto->talles()->sync($tallesData);
+        }
 
         return redirect()->route('admin.productos.index')->with('exito', 'Producto actualizado correctamente.');
     }

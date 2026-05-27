@@ -23,13 +23,29 @@
                         
                         <div class="product-overlay">
                             @auth
-                                <form action="{{ route('carrito.add', $producto->id) }}" method="POST" style="margin: 0; width: 100%;">
+                                <form action="{{ route('carrito.add', $producto->id) }}" method="POST" style="margin: 0; width: 100%; display: flex; flex-direction: column; gap: 8px;">
                                     @csrf
                                     <input type="hidden" name="cantidad" value="1">
-                                    <button type="submit" class="product-overlay-btn" style="width: 100%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--accent-color); color: var(--bg-dark);">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/><path d="M12 10v6"/><path d="M9 13h6"/></svg>
-                                        Agregar al carrito
-                                    </button>
+                                    @if($producto->talles->sum('pivot.stock') > 0)
+                                        <select name="talle_id" required style="width: 100%; padding: 5px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);">
+                                            <option value="">Elegir Talle</option>
+                                            @foreach($producto->talles as $talle)
+                                                @if($talle->pivot->stock > 0)
+                                                    <option value="{{ $talle->id }}">{{ $talle->nombre }}</option>
+                                                @else
+                                                    <option value="{{ $talle->id }}" disabled>{{ $talle->nombre }} (Agotado)</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        <button type="submit" class="product-overlay-btn" style="width: 100%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--accent-color); color: var(--bg-dark);">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/><path d="M12 10v6"/><path d="M9 13h6"/></svg>
+                                            Agregar al carrito
+                                        </button>
+                                    @else
+                                        <button type="button" disabled class="product-overlay-btn" style="width: 100%; border: none; cursor: not-allowed; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--bg-card); color: var(--text-muted); opacity: 0.7;">
+                                            Agotado
+                                        </button>
+                                    @endif
                                 </form>
                             @else
                                 <a href="{{ route('login') }}" class="product-overlay-btn" style="text-align: center; text-decoration: none; background: var(--bg-light); color: var(--text-main);">Iniciar sesión</a>
@@ -72,11 +88,7 @@
         const totalCards = cards.length;
         document.getElementById('productCount').textContent = totalCards + ' producto' + (totalCards !== 1 ? 's' : '');
 
-        // Links de WhatsApp dinámicos en cada overlay
-        document.querySelectorAll('.product-overlay-btn').forEach(btn => {
-            const name = btn.closest('.product-card').querySelector('h4').textContent.trim();
-            btn.href = `https://wa.me/${WSP_CAT}?text=${encodeURIComponent('Hola! Me interesa el producto: ' + name + '. ¿Tienen disponibilidad?')}`;
-        });
+
 
         // Filtros
         document.querySelectorAll('.filter-chip').forEach(chip => {

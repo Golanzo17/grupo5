@@ -51,4 +51,17 @@ class ClienteController extends Controller
 
         return redirect()->route('cliente.perfil')->with('exito', 'Perfil actualizado correctamente.');
     }
+
+    /**
+     * Historial de compras del cliente.
+     */
+    public function compras()
+    {
+        $ordenes = \App\Models\Order::with(['items.producto', 'items.talle'])
+                        ->where('user_id', Auth::id())
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+                        
+        return view('Backend.usuarios.compras', compact('ordenes'));
+    }
 }

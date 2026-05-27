@@ -44,13 +44,22 @@
                     @enderror
                 </div>
 
-                <div class="form-group">
-                    <label for="stock">Stock</label>
-                    <input type="number" id="stock" name="stock" value="{{ old('stock', $producto->stock) }}" min="0"
-                           class="form-input @error('stock') form-input-error @enderror">
-                    @error('stock')
-                        <span class="form-error">{{ $message }}</span>
-                    @enderror
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Stock por Talle</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                        @foreach($talles as $talle)
+                            @php
+                                $pivot = $producto->talles->where('id', $talle->id)->first();
+                                $stock = $pivot ? $pivot->pivot->stock : '';
+                            @endphp
+                            <div style="background: var(--bg-dark); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); flex: 1; min-width: 120px;">
+                                <label style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+                                    <span>Talle {{ $talle->nombre }}</span>
+                                </label>
+                                <input type="number" name="talles[{{ $talle->id }}]" value="{{ $stock }}" min="0" placeholder="0" class="form-input" style="width: 100%;">
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
