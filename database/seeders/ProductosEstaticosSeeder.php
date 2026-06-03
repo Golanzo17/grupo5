@@ -82,7 +82,6 @@ class ProductosEstaticosSeeder extends Seeder
                         'imagen_ruta' => $prod['imagen'],
                         'categoria_id' => $categoriasIds[$prod['cat']],
                         'es_nuevo' => $prod['destacado'],
-                        'stock' => 10,
                         'descripcion' => 'Descripción breve para ' . $prod['nombre']
                     ]
                 );
@@ -109,7 +108,6 @@ class ProductosEstaticosSeeder extends Seeder
                         'imagen_ruta' => $prod['imagen'],
                         'categoria_id' => $catBarberia->id,
                         'es_nuevo' => $prod['destacado'],
-                        'stock' => 10,
                         'descripcion' => 'Descripción breve para ' . $prod['nombre']
                     ]
                 );
