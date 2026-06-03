@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Usuario;
 use App\Models\Producto;
 use App\Models\Categoria;
+use App\Models\Consulta;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -17,6 +18,8 @@ class AdminController extends Controller
         $totalUsuarios   = Usuario::count();
         $totalProductos  = Producto::count();
         $totalCategorias = Categoria::count();
+        $totalConsultas  = Consulta::count();
+        $consultasNuevas = Consulta::where('leida', false)->count();
 
         // Últimos 5 usuarios registrados
         $ultimosUsuarios = Usuario::with('rol')
@@ -30,12 +33,21 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
+        // Últimas 5 consultas sin leer
+        $ultimasConsultas = Consulta::where('leida', false)
+            ->latest()
+            ->take(5)
+            ->get();
+
         return view('Backend.Admin.Dashboard', compact(
             'totalUsuarios',
             'totalProductos',
             'totalCategorias',
+            'totalConsultas',
+            'consultasNuevas',
             'ultimosUsuarios',
-            'ultimosProductos'
+            'ultimosProductos',
+            'ultimasConsultas'
         ));
     }
 

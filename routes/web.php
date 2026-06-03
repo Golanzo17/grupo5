@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ConsultaController;
 
 use App\Http\Controllers\HomeController;
 
@@ -39,6 +40,7 @@ Route::get('/contacto', function () {
 Route::get('/consultas', function () {
     return view('Consultas');
 });
+Route::post('/consultas', [ConsultaController::class, 'store'])->name('consultas.store');
 
 Route::get('/turnos', function () {
     return view('Turnos');
@@ -77,6 +79,11 @@ Route::middleware(['auth', 'rol:admin'])->prefix('admin')->name('admin.')->group
 
     // Gestión de Usuarios
     Route::resource('usuarios', UsuarioController::class);
+
+    // Gestión de Consultas
+    Route::get('/consultas', [ConsultaController::class, 'index'])->name('consultas.index');
+    Route::patch('/consultas/{consulta}/leida', [ConsultaController::class, 'marcarLeida'])->name('consultas.leida');
+    Route::delete('/consultas/{consulta}', [ConsultaController::class, 'destroy'])->name('consultas.destroy');
 });
 
 // ─────────────────────────────────────────────

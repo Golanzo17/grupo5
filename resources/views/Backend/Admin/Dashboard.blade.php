@@ -34,6 +34,16 @@
                 <span class="stat-label">Categorías</span>
             </div>
         </a>
+
+        <a href="{{ route('admin.consultas.index') }}" class="stat-card" style="text-decoration: none; color: inherit;">
+            <div class="stat-icon stat-icon-messages" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="stat-info">
+                <span class="stat-number">{{ $totalConsultas }} <span style="font-size: 0.7em; color: #e74c3c;">{{ $consultasNuevas ? '(+' . $consultasNuevas . ')' : '' }}</span></span>
+                <span class="stat-label">Consultas</span>
+            </div>
+        </a>
     </div>
 
     <!-- Quick Actions -->
@@ -109,6 +119,38 @@
                             </tr>
                         @empty
                             <tr><td colspan="3" class="text-center">No hay productos cargados.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Últimas Consultas -->
+        <div class="admin-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 class="admin-section-title" style="margin: 0;">Últimas Consultas</h2>
+                <a href="{{ route('admin.consultas.index') }}" style="color: #667eea; font-size: 0.9em; text-decoration: none;">Ver todas →</a>
+            </div>
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Mensaje</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($ultimasConsultas as $consulta)
+                            <tr style="background-color: #f0f4ff;">
+                                <td><strong>{{ $consulta->nombre }}</strong></td>
+                                <td>{{ $consulta->email }}</td>
+                                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $consulta->mensaje }}</td>
+                                <td>{{ $consulta->created_at->format('d/m/Y') }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="4" class="text-center">No hay consultas sin leer.</td></tr>
                         @endforelse
                     </tbody>
                 </table>

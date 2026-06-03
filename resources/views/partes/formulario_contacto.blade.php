@@ -5,10 +5,11 @@
             
             <!-- Contenedor del Formulario -->
             <div id="contact-form-wrapper">
-                <form id="contact-form" action="#" method="POST" class="contact-form">
+                <form id="contact-form" action="{{ route('consultas.store') }}" method="POST" class="contact-form">
+                    @csrf
                     <div class="input-group">
                         <label for="name">Nombre Completo</label>
-                        <input type="text" id="name" name="name" placeholder="Tu nombre" required>
+                        <input type="text" id="name" name="nombre" placeholder="Tu nombre" required>
                     </div>
                     <div class="input-group">
                         <label for="email">Correo Electrónico</label>
@@ -20,6 +21,7 @@
                     </div>
                     <button type="submit" class="btn-primary btn-full">Enviar Consulta</button>
                 </form>
+                <div id="error-message" style="display: none; color: #d32f2f; padding: 15px; background-color: #ffebee; border-radius: 5px; margin-top: 10px;"></div>
             </div>
 
             <!-- Mensaje de Éxito (Oculto por defecto) -->
@@ -35,33 +37,64 @@
         </div>
     </section>
 
-    <!-- SCRIPT PARA SIMULAR EL ENVÍO -->
+    <!-- SCRIPT PARA ENVIAR EL FORMULARIO -->
     <script>
         document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault(); // Evita que la página recargue o tire error
+            e.preventDefault();
 
-            // Cambiar el texto del botón temporalmente para simular carga
             const btn = this.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
             btn.innerText = 'Enviando...';
             btn.style.opacity = '0.7';
             btn.disabled = true;
 
-            // Simular un retraso de red de 1 segundo
-            setTimeout(() => {
+            const formData = new FormData(this);
+
+            fetch("{{ route('consultas.store') }}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => Promise.reject(data));
+                }
+                return response.json();
+            })
+            .then(data => {
                 document.getElementById('contact-form-wrapper').style.display = 'none';
                 document.getElementById('success-message').style.display = 'block';
-                
-                // Resetear el botón por si el usuario vuelve
                 btn.innerText = originalText;
                 btn.style.opacity = '1';
                 btn.disabled = false;
                 this.reset();
-            }, 1000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                btn.innerText = originalText;
+                btn.style.opacity = '1';
+                btn.disabled = false;
+                
+                let errorMsg = 'Ocurrió un error. Por favor intenta de nuevo.';
+                if (error.message) {
+                    errorMsg = Object.values(error.message).flat().join(', ');
+                }
+                
+                document.getElementById('error-message').textContent = errorMsg;
+                document.getElementById('error-message').style.display = 'block';
+                
+                setTimeout(() => {
+                    document.getElementById('error-message').style.display = 'none';
+                }, 5000);
+            });
         });
 
         function resetForm() {
             document.getElementById('success-message').style.display = 'none';
             document.getElementById('contact-form-wrapper').style.display = 'block';
+            document.getElementById('error-message').style.display = 'none';
         }
     </script>
