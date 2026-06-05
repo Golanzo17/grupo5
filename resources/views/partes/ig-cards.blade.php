@@ -23,7 +23,7 @@
                     <!-- Avatar con aro de Stories -->
                     <div class="ig-avatar-ring">
                         <div class="ig-avatar">
-                            <img src="/images/Quienes-somos/WestSide-logo.jpg" alt="Avatar westsid3club">
+                            <img src="/images/WestSide-logo.jpg" alt="Avatar westsid3club">
                         </div>
                     </div>
                     <!-- Info básica -->

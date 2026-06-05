@@ -19,7 +19,7 @@
                             <span class="product-new-tag">Nuevo</span>
                         @endif
                         
-                        <img src="{{ Str::startsWith($producto->imagen_ruta, ['http', '/', 'images/']) ? asset($producto->imagen_ruta) : asset('storage/' . $producto->imagen_ruta) }}" alt="{{ $producto->nombre }}">
+                        <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" loading="lazy">
                         
                         <div class="product-overlay">
                             @auth
@@ -63,6 +63,10 @@
                 <h4>No encontramos productos</h4>
                 <p>Probá con otro término o quitá el filtro activo.</p>
             </div>
+
+            <div style="margin-top: 40px; display: flex; justify-content: center;">
+                {{ $productos->links() }}
+            </div>
         </div>
     </section>
 
@@ -84,50 +88,28 @@
         const cards = document.querySelectorAll('#catalog-products .product-card');
         cards.forEach(card => cardObserver.observe(card));
 
-        // Contador inicial real
-        const totalCards = cards.length;
+        // Mostrar el total real devuelto por la base de datos
+        const totalCards = {{ $productos->total() }};
         document.getElementById('productCount').textContent = totalCards + ' producto' + (totalCards !== 1 ? 's' : '');
 
+        if (totalCards === 0) {
+            document.getElementById('noProductsMessage').style.display = 'block';
+        }
 
+        // === Filtros y Búsqueda (Backend-driven) ===
+        const catalogForm = document.getElementById('catalogForm');
+        const categoryInput = document.getElementById('categoryInput');
 
-        // Filtros
         document.querySelectorAll('.filter-chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
                 chip.classList.add('active');
-                filterProducts();
+                
+                // Setear el valor oculto y enviar el formulario
+                categoryInput.value = chip.getAttribute('data-filter');
+                catalogForm.submit();
             });
         });
-
-        document.getElementById('productSearch').addEventListener('input', filterProducts);
-
-        function filterProducts() {
-            const search = document.getElementById('productSearch').value.toLowerCase().trim();
-            const active = document.querySelector('.filter-chip.active').getAttribute('data-filter');
-            const cards  = document.querySelectorAll('#catalog-products .product-card');
-            let visible  = 0;
-
-            cards.forEach(card => {
-                const titleElement = card.querySelector('h4');
-                const title    = (titleElement ? titleElement.textContent : '').toLowerCase();
-                const category = card.getAttribute('data-category') || '';
-                const matchS   = !search || title.includes(search);
-                const matchF   = active === 'all' || category === active;
-
-                if (matchS && matchF) {
-                    card.style.display = '';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                    card.style.animationDelay = (visible * 0.05) + 's';
-                    visible++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            document.getElementById('productCount').textContent = visible + ' producto' + (visible !== 1 ? 's' : '');
-            document.getElementById('noProductsMessage').style.display = visible === 0 ? 'block' : 'none';
-        }
 
         // === Agregar al carrito sin recargar la página (AJAX) ===
         document.querySelectorAll('form[action*="carrito/agregar"]').forEach(form => {
@@ -149,17 +131,36 @@
                         'Accept': 'application/json'
                     }
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Error al agregar al carrito');
+                        });
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    // Restaurar botón
-                    btn.innerHTML = originalHtml;
-                    btn.disabled = false;
-                    
                     if(data.success) {
-                        // Actualizar contadores del menú
+                        // Confirmación visual (Fix #24)
+                        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> ¡Agregado!';
+                        btn.style.background = '#22c55e'; // Verde success
+                        btn.style.color = '#fff';
+
+                        setTimeout(() => {
+                            btn.innerHTML = originalHtml;
+                            btn.style = ''; // Restaura estilos inline
+                            btn.disabled = false;
+                        }, 2000);
+
+                        // Actualizar contadores del menú (Fix #26)
                         document.querySelectorAll('.cart-count-badge').forEach(badge => {
                             badge.textContent = data.cart_count;
-                            badge.style.display = 'inline-block';
+                            badge.style.display = 'flex';
+                            
+                            // Animación bounce
+                            badge.classList.remove('bounce-anim');
+                            void badge.offsetWidth; // Trigger reflow
+                            badge.classList.add('bounce-anim');
                         });
 
                         // Actualizar el HTML del mini carrito si existe
@@ -189,6 +190,12 @@
         style.innerHTML = `
             @keyframes spin { 100% { transform: rotate(360deg); } } 
             .spin { animation: spin 1s linear infinite; }
+            @keyframes bounce { 
+                0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 
+                40% {transform: translateY(-8px);} 
+                60% {transform: translateY(-4px);} 
+            }
+            .bounce-anim { animation: bounce 0.6s ease; }
             #catalog-products .product-card:hover .product-overlay-btn {
                 box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15) !important;
             }

@@ -74,7 +74,7 @@ class CheckoutController extends Controller
                 'notas'         => $request->notas,
             ]);
 
-            // Procesar items, crear OrderItems y restar stock
+            // Procesar items, crear OrderItems y restar stock atómicamente
             foreach ($cart->items as $item) {
                 if (!$item->producto) continue;
 
@@ -86,11 +86,11 @@ class CheckoutController extends Controller
                     'precio_unitario' => $item->producto->precio,
                 ]);
 
-                // Restar stock
-                $currentStock = $item->producto->talles()->where('talle_id', $item->talle_id)->first()->pivot->stock;
-                $item->producto->talles()->updateExistingPivot($item->talle_id, [
-                    'stock' => $currentStock - $item->cantidad
-                ]);
+                // Restar stock de forma atómica (previene race conditions)
+                DB::table('producto_talle')
+                    ->where('producto_id', $item->producto_id)
+                    ->where('talle_id', $item->talle_id)
+                    ->decrement('stock', $item->cantidad);
             }
 
             // Vaciar carrito
@@ -118,7 +118,7 @@ class CheckoutController extends Controller
     public function comprobante(Order $order)
     {
         // Solo el dueño de la orden o un admin pueden ver el comprobante
-        if ($order->user_id !== Auth::id() && Auth::user()->rol !== 'admin') {
+        if ($order->user_id !== Auth::id() && Auth::user()->rol->nombre !== 'admin') {
             abort(403);
         }
 

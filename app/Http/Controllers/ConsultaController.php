@@ -15,13 +15,13 @@ class ConsultaController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'message' => 'required|string|max:1000',
+            'mensaje' => 'required|string|max:1000',
         ]);
 
         Consulta::create([
             'nombre' => $validated['nombre'],
             'email' => $validated['email'],
-            'mensaje' => $validated['message'],
+            'mensaje' => $validated['mensaje'],
         ]);
 
         return response()->json(['success' => true, 'message' => '¡Consulta enviada correctamente!']);

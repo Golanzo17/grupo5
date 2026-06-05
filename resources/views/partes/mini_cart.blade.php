@@ -12,7 +12,7 @@
             @endphp
             <div style="display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0;">
                 @if($item->producto)
-                    <img src="{{ Str::startsWith($item->producto->imagen_ruta, ['http', '/', 'images/']) ? asset($item->producto->imagen_ruta) : asset('storage/' . $item->producto->imagen_ruta) }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                    <img src="{{ $item->producto->imagen_url }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
                     <div style="flex: 1; min-width: 0;">
                         <h5 style="margin: 0; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-base);">{{ $item->producto->nombre }}</h5>
                         <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);">{{ $item->cantidad }} x ${{ number_format($item->producto->precio, 0, ',', '.') }}</p>

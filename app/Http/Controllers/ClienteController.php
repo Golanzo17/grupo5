@@ -35,13 +35,23 @@ class ClienteController extends Controller
         $usuario = Auth::user();
 
         $request->validate([
-            'nombre'   => 'required|string|max:255',
-            'email'    => 'required|email|unique:usuarios,email,' . $usuario->id,
-            'password' => 'nullable|string|min:8|confirmed',
+            'nombre'        => 'required|string|max:255',
+            'apellido'      => 'nullable|string|max:255',
+            'email'         => 'required|email|unique:usuarios,email,' . $usuario->id,
+            'telefono'      => 'nullable|string|max:20',
+            'direccion'     => 'nullable|string|max:255',
+            'ciudad'        => 'nullable|string|max:255',
+            'codigo_postal' => 'nullable|string|max:20',
+            'password'      => 'nullable|string|min:8|confirmed',
         ]);
 
-        $usuario->nombre = $request->nombre;
-        $usuario->email  = $request->email;
+        $usuario->nombre        = $request->nombre;
+        $usuario->apellido      = $request->apellido;
+        $usuario->email         = $request->email;
+        $usuario->telefono      = $request->telefono;
+        $usuario->direccion     = $request->direccion;
+        $usuario->ciudad        = $request->ciudad;
+        $usuario->codigo_postal = $request->codigo_postal;
 
         if ($request->filled('password')) {
             $usuario->password = $request->password;

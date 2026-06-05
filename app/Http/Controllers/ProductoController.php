@@ -8,6 +8,8 @@ use App\Models\Talle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ProductoController extends Controller
 {
@@ -47,12 +49,24 @@ class ProductoController extends Controller
             'talles.*'     => 'nullable|integer|min:0',
         ]);
 
-        // Guardar imagen
-        $imagenRuta = $request->file('imagen')->store('productos', 'public');
+        // Optimizar, redimensionar y convertir imagen a WebP
+        $manager = new ImageManager(new Driver());
+        $image = $manager->read($request->file('imagen'));
+        $image->scaleDown(width: 1000); // Max width 1000px
+        $encoded = $image->toWebp(quality: 80);
+        
+        $filename = 'productos/' . uniqid() . '.webp';
+        Storage::disk('public')->put($filename, $encoded->toString());
+        $imagenRuta = $filename;
+
+        // Generar slug único
+        $slug = Str::slug($request->nombre);
+        $slugCount = Producto::withTrashed()->where('slug', 'like', $slug . '%')->count();
+        $slugFinal = $slugCount ? "{$slug}-{$slugCount}" : $slug;
 
         $producto = Producto::create([
             'nombre'       => $request->nombre,
-            'slug'         => Str::slug($request->nombre),
+            'slug'         => $slugFinal,
             'categoria_id' => $request->categoria_id,
             'precio'       => $request->precio,
             'descripcion'  => $request->descripcion,
@@ -109,9 +123,14 @@ class ProductoController extends Controller
             'talles.*'     => 'nullable|integer|min:0',
         ]);
 
+        // Generar slug único (excluyendo el producto actual)
+        $slug = Str::slug($request->nombre);
+        $slugCount = Producto::withTrashed()->where('slug', 'like', $slug . '%')->where('id', '!=', $producto->id)->count();
+        $slugFinal = $slugCount ? "{$slug}-{$slugCount}" : $slug;
+
         $datos = [
             'nombre'       => $request->nombre,
-            'slug'         => Str::slug($request->nombre),
+            'slug'         => $slugFinal,
             'categoria_id' => $request->categoria_id,
             'precio'       => $request->precio,
             'descripcion'  => $request->descripcion,
@@ -119,13 +138,22 @@ class ProductoController extends Controller
             'activo'       => $request->boolean('activo', true),
         ];
 
-        // Si se sube una nueva imagen, reemplazar la anterior
+        // Si se sube una nueva imagen, optimizarla y reemplazar la anterior
         if ($request->hasFile('imagen')) {
             // Borrar imagen anterior si existe
             if ($producto->imagen_ruta && Storage::disk('public')->exists($producto->imagen_ruta)) {
                 Storage::disk('public')->delete($producto->imagen_ruta);
             }
-            $datos['imagen_ruta'] = $request->file('imagen')->store('productos', 'public');
+            
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($request->file('imagen'));
+            $image->scaleDown(width: 1000);
+            $encoded = $image->toWebp(quality: 80);
+            
+            $filename = 'productos/' . uniqid() . '.webp';
+            Storage::disk('public')->put($filename, $encoded->toString());
+            
+            $datos['imagen_ruta'] = $filename;
         }
 
         $producto->update($datos);
@@ -148,11 +176,7 @@ class ProductoController extends Controller
      */
     public function destroy(Producto $producto)
     {
-        // Borrar imagen del storage
-        if ($producto->imagen_ruta && Storage::disk('public')->exists($producto->imagen_ruta)) {
-            Storage::disk('public')->delete($producto->imagen_ruta);
-        }
-
+        // Soft delete: NO borramos la imagen para poder restaurar el producto
         $producto->delete();
 
         return redirect()->route('admin.productos.index')->with('exito', 'Producto eliminado correctamente.');

@@ -57,7 +57,12 @@
                                 </td>
                                 <td>
                                     <div class="table-actions">
-                                        <button type="button" class="btn-sm" style="background: rgba(52, 152, 219, 0.15); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.3);" onclick="mostrarDetalles({{ $consulta->id }}, '{{ addslashes($consulta->nombre) }}', '{{ $consulta->email }}', `{{ addslashes($consulta->mensaje) }}`)">
+                                        <button type="button" class="btn-sm btn-ver-detalle"
+                                            style="background: rgba(52, 152, 219, 0.15); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.3);"
+                                            data-id="{{ $consulta->id }}"
+                                            data-nombre="{{ e($consulta->nombre) }}"
+                                            data-email="{{ e($consulta->email) }}"
+                                            data-mensaje="{{ e($consulta->mensaje) }}">
                                             Ver
                                         </button>
                                         
@@ -127,21 +132,29 @@
 </div>
 
 <script>
-    function mostrarDetalles(id, nombre, email, mensaje) {
-        document.getElementById('modalNombre').textContent = nombre;
-        document.getElementById('modalEmail').textContent = email;
-        document.getElementById('modalMensaje').textContent = mensaje;
-        document.getElementById('detallesModal').style.display = 'flex';
+    // Delegated event listener para botones "Ver" (usa data-* attributes, seguro contra XSS)
+    document.querySelectorAll('.btn-ver-detalle').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const nombre = this.dataset.nombre;
+            const email = this.dataset.email;
+            const mensaje = this.dataset.mensaje;
 
-        // Marcar como leída automáticamente
-        fetch('{{ route("admin.consultas.leida", ":id") }}'.replace(':id', id), {
-            method: 'PATCH',
-            headers: {
-                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-                'Content-Type': 'application/json'
-            }
-        }).catch(error => console.error('Error:', error));
-    }
+            document.getElementById('modalNombre').textContent = nombre;
+            document.getElementById('modalEmail').textContent = email;
+            document.getElementById('modalMensaje').textContent = mensaje;
+            document.getElementById('detallesModal').style.display = 'flex';
+
+            // Marcar como leída automáticamente
+            fetch('{{ route("admin.consultas.leida", ":id") }}'.replace(':id', id), {
+                method: 'PATCH',
+                headers: {
+                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/json'
+                }
+            }).catch(error => console.error('Error:', error));
+        });
+    });
 
     function cerrarDetalles() {
         document.getElementById('detallesModal').style.display = 'none';

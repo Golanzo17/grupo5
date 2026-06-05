@@ -17,7 +17,7 @@
                     </div>
                     <div class="input-group">
                         <label for="message">Mensaje</label>
-                        <textarea id="message" name="message" rows="4" placeholder="Escribe tu consulta aquí..." required></textarea>
+                        <textarea id="message" name="mensaje" rows="4" placeholder="Escribe tu consulta aquí..." required></textarea>
                     </div>
                     <button type="submit" class="btn-primary btn-full">Enviar Consulta</button>
                 </form>

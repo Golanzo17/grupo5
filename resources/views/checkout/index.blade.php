@@ -54,16 +54,16 @@
                 <div id="datos_envio" style="display: none; background: var(--bg-dark); padding: 15px; border-radius: var(--radius-sm); margin-bottom: 30px;">
                     <div style="margin-bottom: 15px;">
                         <label style="display: block; margin-bottom: 5px; color: var(--text-muted);">Dirección completa</label>
-                        <input type="text" name="direccion" value="{{ old('direccion') }}" class="form-input" style="width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);">
+                        <input type="text" name="direccion" value="{{ old('direccion', auth()->user()->direccion) }}" class="form-input" style="width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);">
                     </div>
                     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px;">
                         <div>
                             <label style="display: block; margin-bottom: 5px; color: var(--text-muted);">Ciudad / Localidad</label>
-                            <input type="text" name="ciudad" value="{{ old('ciudad') }}" class="form-input" style="width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);">
+                            <input type="text" name="ciudad" value="{{ old('ciudad', auth()->user()->ciudad) }}" class="form-input" style="width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);">
                         </div>
                         <div>
                             <label style="display: block; margin-bottom: 5px; color: var(--text-muted);">Código Postal</label>
-                            <input type="text" name="codigo_postal" value="{{ old('codigo_postal') }}" class="form-input" style="width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);">
+                            <input type="text" name="codigo_postal" value="{{ old('codigo_postal', auth()->user()->codigo_postal) }}" class="form-input" style="width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);">
                         </div>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
                             $total += $subtotal;
                         @endphp
                         <div style="display: flex; gap: 10px;">
-                            <img src="{{ Str::startsWith($item->producto->imagen_ruta, ['http', '/', 'images/']) ? asset($item->producto->imagen_ruta) : asset('storage/' . $item->producto->imagen_ruta) }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: var(--radius-sm);">
+                            <img src="{{ $item->producto->imagen_url }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: var(--radius-sm);">
                             <div style="flex: 1;">
                                 <div style="font-size: 0.95rem; font-weight: 500;">{{ $item->producto->nombre }}</div>
                                 <div style="font-size: 0.85rem; color: var(--text-muted);">

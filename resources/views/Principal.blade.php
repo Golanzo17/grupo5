@@ -77,10 +77,10 @@ Te ves mejor. Te sentís distinto.</p>
                                 <span class="product-new-tag">Nuevo</span>
                             @endif
                             
-                            <img src="{{ $producto->imagen_ruta }}" alt="{{ $producto->nombre }}">
+                            <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" loading="lazy">
                             
                             <div class="product-overlay">
-                                <a href="https://wa.me/{{ env('WSP_NUMBER', '5493795193973') }}?text=Hola,%20me%20interesa%20el%20producto:%20{{ urlencode($producto->nombre) }}" class="product-overlay-btn" target="_blank">{!! $wspIcon !!} Consultar</a>
+                                <a href="https://wa.me/5493795193973?text=Hola,%20me%20interesa%20el%20producto:%20{{ urlencode($producto->nombre) }}" class="product-overlay-btn wsp-link" target="_blank">{!! $wspIcon !!} Consultar</a>
                             </div>
                             <div class="product-info">
                                 <h4>{{ $producto->nombre }}</h4>
