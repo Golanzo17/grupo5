@@ -27,10 +27,28 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         <span id="toast-message" style="font-weight: 500;"></span>
     </div>
+
+    <!-- Error Toast -->
+    <div id="toast-error" style="position: fixed; top: 100px; right: 20px; background: var(--bg-card); color: var(--text-main); padding: 15px 25px; border-left: 4px solid var(--error-color, #ef4444); border-radius: var(--radius-sm); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; gap: 15px; transform: translateX(150%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--error-color, #ef4444)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        <span id="toast-error-message" style="font-weight: 500;"></span>
+    </div>
     <script>
         window.showToast = function(message) {
             const toast = document.getElementById('toast-success');
             const msgEl = document.getElementById('toast-message');
+            if(toast && msgEl) {
+                msgEl.textContent = message;
+                toast.style.transform = 'translateX(0)';
+                setTimeout(() => {
+                    toast.style.transform = 'translateX(150%)';
+                }, 3500);
+            }
+        };
+
+        window.showErrorToast = function(message) {
+            const toast = document.getElementById('toast-error');
+            const msgEl = document.getElementById('toast-error-message');
             if(toast && msgEl) {
                 msgEl.textContent = message;
                 toast.style.transform = 'translateX(0)';
@@ -96,6 +114,12 @@
         @if(session('success'))
             setTimeout(() => {
                 window.showToast("{{ session('success') }}");
+            }, 100);
+        @endif
+
+        @if(session('error'))
+            setTimeout(() => {
+                window.showErrorToast("{{ session('error') }}");
             }, 100);
         @endif
     </script>
