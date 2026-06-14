@@ -90,6 +90,10 @@ class UsuarioController extends Controller
      */
     public function destroy(Usuario $usuario)
     {
+        if ($usuario->id === auth()->id()) {
+            return redirect()->route('admin.usuarios.index')->with('error', 'No puedes eliminarte a ti mismo.');
+        }
+
         $usuario->delete();
         return redirect()->route('admin.usuarios.index')->with('exito', 'Usuario eliminado correctamente.');
     }

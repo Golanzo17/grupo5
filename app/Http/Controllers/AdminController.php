@@ -54,9 +54,23 @@ class AdminController extends Controller
     /**
      * Mostrar historial de ventas.
      */
-    public function ventas()
+    public function ventas(Request $request)
     {
-        $ordenes = \App\Models\Order::with(['user', 'items.producto'])->orderBy('created_at', 'desc')->paginate(15);
+        $query = \App\Models\Order::with(['user', 'items.producto'])->orderBy('created_at', 'desc');
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        if ($request->filled('fecha_desde')) {
+            $query->whereDate('created_at', '>=', $request->fecha_desde);
+        }
+
+        if ($request->filled('fecha_hasta')) {
+            $query->whereDate('created_at', '<=', $request->fecha_hasta);
+        }
+
+        $ordenes = $query->paginate(15)->withQueryString();
         return view('Backend.Admin.ventas.index', compact('ordenes'));
     }
 

@@ -7,6 +7,34 @@
         <h2 class="admin-section-title">Historial de Ventas</h2>
     </div>
 
+    <div style="margin-bottom: 20px; background: var(--bg-dark); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+        <form action="{{ route('admin.ventas.index') }}" method="GET" style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
+            <div>
+                <label for="estado" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-muted);">Filtrar por Estado</label>
+                <select name="estado" id="estado" class="form-input" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                    <option value="">Todos los estados</option>
+                    <option value="pendiente" {{ request('estado') === 'pendiente' ? 'selected' : '' }}>Pendiente</option>
+                    <option value="completado" {{ request('estado') === 'completado' ? 'selected' : '' }}>Completado</option>
+                    <option value="cancelado" {{ request('estado') === 'cancelado' ? 'selected' : '' }}>Cancelado</option>
+                </select>
+            </div>
+            <div>
+                <label for="fecha_desde" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-muted);">Desde</label>
+                <input type="date" name="fecha_desde" id="fecha_desde" value="{{ request('fecha_desde') }}" class="form-input" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+            </div>
+            <div>
+                <label for="fecha_hasta" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-muted);">Hasta</label>
+                <input type="date" name="fecha_hasta" id="fecha_hasta" value="{{ request('fecha_hasta') }}" class="form-input" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+            </div>
+            <div>
+                <button type="submit" class="btn" style="padding: 8px 15px;">Filtrar</button>
+                @if(request()->hasAny(['estado', 'fecha_desde', 'fecha_hasta']) && (request('estado') || request('fecha_desde') || request('fecha_hasta')))
+                    <a href="{{ route('admin.ventas.index') }}" class="btn" style="padding: 8px 15px; background: transparent; border: 1px solid var(--border-color); text-decoration: none;">Limpiar</a>
+                @endif
+            </div>
+        </form>
+    </div>
+
     <div class="admin-table-wrapper">
         <table class="admin-table">
             <thead>
